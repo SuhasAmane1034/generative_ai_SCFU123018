@@ -1,0 +1,98 @@
+* **Small:** Microsoft Phi-3 Mini 4K Instruct
+* **Medium:** Mistral 7B Instruct v0.3
+* **Large:** Qwen2.5-14B Instruct
+
+Here is the information you can put directly into your lab record.
+
+| Question                          | **Small: Phi-3 Mini 4K Instruct**      | **Medium: Mistral 7B Instruct v0.3**                      | **Large: Qwen2.5-14B Instruct**                                                                  |
+| --------------------------------- | -------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **Who created it?**               | Microsoft                              | Mistral AI                                                | Qwen / Alibaba Cloud                                                                             |
+| **Parameters**                    | **3.8B**                               | **7B**                                                    | **14.7B**                                                                                        |
+| **Is it a generative model?**     | **Yes**                                | **Yes**                                                   | **Yes**                                                                                          |
+| **Context length**                | **4K tokens (4,096)**                  | **32K tokens (32,768)**                                   | **131K tokens (131,072)**                                                                        |
+| **Suitable for local execution?** | **Yes, very suitable** on your M2 8 GB | **Yes, but tight** on 8 GB; quantized version recommended | **No, not practically suitable** for your 8 GB Mac                                               |
+| **Hardware in model card**        | Training: **512 × H100 80GB GPUs**     | No specific minimum inference hardware stated             | Model card provides deployment instructions but does not give a simple "minimum RAM" requirement |
+| **Recommended local format**      | **4-bit / GGUF**                       | **4-bit / GGUF**                                          | Would need significant RAM/VRAM; not recommended for your Mac                                    |
+
+### 1. Small Model — Phi-3 Mini 4K Instruct
+
+**Creator:** Microsoft
+**Parameters:** 3.8 billion
+**Generative model:** Yes. It is a decoder-only Transformer that generates text.
+**Context length:** 4,096 tokens. ([Hugging Face][1])
+
+**Local execution:** **Yes.** This is the best choice for your 8 GB M2 Mac. Microsoft specifically provides cross-platform support for CPU, GPU and Mac desktops, and the Hugging Face page provides quantized versions. ([Hugging Face][2])
+
+A 4-bit GGUF version is approximately **2.2 GB**, which makes it particularly suitable for your Mac. ([Hugging Face][3])
+
+**Hardware stated in the model card:** Microsoft says the model was trained using **512 H100-80GB GPUs for 10 days**. This is **training hardware**, not the hardware you need to run it locally. ([Hugging Face][1])
+
+**For your lab:**
+
+> Phi-3 Mini is a 3.8B parameter generative language model developed by Microsoft. It has a 4K token context window and is highly suitable for local execution on an M2 Mac with 8 GB RAM, especially using a quantized version.
+
+---
+
+### 2. Medium Model — Mistral 7B Instruct v0.3
+
+**Creator:** Mistral AI
+**Parameters:** 7 billion
+**Generative model:** Yes. It is an instruction fine-tuned Large Language Model. ([Hugging Face][4])
+
+**Context length:** **32,768 tokens (32K)**. The model configuration specifies `max_position_embeddings: 32768`. ([Hugging Face][5])
+
+**Local execution:** **Yes, but your 8 GB RAM is tight.** The original Hugging Face model is much larger in BF16—the repository is around 29 GB—so for your Mac you should use a **quantized version**, such as 4-bit/GGUF. ([Hugging Face][6])
+
+**Hardware stated by model card:** The Mistral model card gives installation and inference instructions but **does not specify a minimum inference RAM/GPU requirement**. ([Hugging Face][4])
+
+So don't write "Mistral recommends 24 GB RAM" unless your teacher specifically asks for a third-party deployment recommendation.
+
+**For your lab:**
+
+> Mistral 7B Instruct v0.3 is a 7B parameter generative language model developed by Mistral AI. It supports a 32K token context length. It can run locally on an M2 Mac, but an 8 GB machine should use a quantized version to reduce memory requirements.
+
+---
+
+### 3. Large Model — Qwen2.5-14B-Instruct
+
+**Creator:** Qwen / Alibaba Cloud
+**Parameters:** **14.7 billion**
+**Generative model:** Yes. The model card identifies it as a **Causal Language Model** and its Hugging Face task is text generation. ([Hugging Face][7])
+
+**Context length:** **131,072 tokens (131K)**. It can generate up to 8,192 tokens in a generation. ([Hugging Face][7])
+
+**Local execution on your M2 8 GB:** **No — not practically.**
+
+This is important for your lab. The model has **14.7B parameters**, so even heavily quantized versions require substantially more memory than your Mac has available once macOS and the model's working memory are taken into account.
+
+The Hugging Face card does provide local deployment instructions using Transformers, vLLM, SGLang and Docker, but it does **not** state that an 8 GB Mac is sufficient. ([Hugging Face][7])
+
+**Hardware recommendation:** The model card doesn't give a simple minimum such as "16 GB RAM." It provides deployment methods and recommends using current Transformers versions. Therefore, for your report, say **"High-memory hardware is required; not suitable for an 8 GB M2 Mac."** ([Hugging Face][7])
+
+
+
+> Qwen2.5-14B-Instruct is a 14.7B parameter generative language model developed by Qwen/Alibaba Cloud. It supports a 131K token context length. It is a large model and is not practically suitable for local execution on an M2 Mac with only 8 GB RAM.
+
+---
+
+
+|                       | Small                     | Medium                   | Large                         |
+| --------------------- | ------------------------- | ------------------------ | ----------------------------- |
+| **Model**             | Phi-3 Mini 4K Instruct    | Mistral 7B Instruct v0.3 | Qwen2.5-14B Instruct          |
+| **Creator**           | Microsoft                 | Mistral AI               | Qwen / Alibaba Cloud          |
+| **Parameters**        | 3.8B                      | 7B                       | 14.7B                         |
+| **Generative?**       | Yes                       | Yes                      | Yes                           |
+| **Context**           | 4K                        | 32K                      | 131K                          |
+| **Local on M2 8GB?**  | ✅ Yes                     | ⚠️ Yes, quantized        | ❌ No                          |
+| **Hardware**          | Training: 512 × H100 80GB | No minimum specified     | High-memory hardware required |
+| **Best for your Mac** | ⭐⭐⭐                       | ⭐⭐                       | ⭐                             |
+
+** "hardware recommended by the model card" and "hardware required to run it locally" are not necessarily the same thing. For Phi-3, for example, the **512 H100 GPUs were used for training**, not because an end user needs 512 GPUs. ([Hugging Face][1])
+
+[1]: https://huggingface.co/microsoft/Phi-3-mini-4k-instruct?utm_source=chatgpt.com "microsoft/Phi-3-mini-4k-instruct · Hugging Face"
+[2]: https://huggingface.co/microsoft/Phi-3-mini-4k-instruct "microsoft/Phi-3-mini-4k-instruct · Hugging Face"
+[3]: https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf?utm_source=chatgpt.com "microsoft/Phi-3-mini-4k-instruct-gguf · Hugging Face"
+[4]: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3 "mistralai/Mistral-7B-Instruct-v0.3 · Hugging Face"
+[5]: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/blob/main/config.json?utm_source=chatgpt.com "config.json · mistralai/Mistral-7B-Instruct-v0.3 at main"
+[6]: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/tree/main?utm_source=chatgpt.com "mistralai/Mistral-7B-Instruct-v0.3 at main"
+[7]: https://huggingface.co/Qwen/Qwen2.5-14B-Instruct/blob/main/README.md "README.md · Qwen/Qwen2.5-14B-Instruct at main"
